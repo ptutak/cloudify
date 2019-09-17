@@ -1,5 +1,5 @@
-import amartus.register as register
 from unittest import TestCase
+import amartus.register as register
 
 
 class TestRegister(TestCase):
