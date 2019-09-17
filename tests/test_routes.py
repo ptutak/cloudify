@@ -1,13 +1,14 @@
 import json
 from unittest import TestCase
 from unittest.mock import patch
-from amartus import main_app
+from amartus import main_app, main_app_register
 
 
 class TestRoutes(TestCase):
     def setUp(self):
         main_app.config['TESTING'] = True
         self.app = main_app.test_client()
+        main_app_register._register = {}
 
     def tearDown(self):
         pass

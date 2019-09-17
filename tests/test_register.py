@@ -11,6 +11,8 @@ class TestRegister(TestCase):
         self.assertEqual(
             self.new_register._register[1],
             {'ip': '1.1.1.1', 'name': 'Piotr', 'userdata': 'My data'})
+        with self.assertRaises(ValueError):
+            self.new_register.register(1, '2.2.2.2', 'Ela', 'DATA')
 
     def test_register_get(self):
         self.new_register.register(2, '1.1.1.1', 'Piotr', 'MyData')

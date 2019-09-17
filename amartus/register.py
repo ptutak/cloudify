@@ -3,6 +3,8 @@ class Register:
         self._register = {}
 
     def register(self, id, ip, name, userdata):
+        if id in self._register:
+            raise ValueError('{} already registered'.format(id))
         self._register[id] = {'ip': ip, 'name': name, 'userdata': userdata}
 
     def check(self, id):
