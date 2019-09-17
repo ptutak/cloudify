@@ -1,17 +1,50 @@
+import json
+from flask import jsonify, abort
 from amartus import main_app, main_app_register, request
 
 
 @main_app.route('/ztp/register/<id>', methods=['PUT'])
-def index(id):
+def register(id):
+    try:
+        data = json.loads(request.data.decode())
+    except:
+        abort(400)
     main_app_register.register(
         id,
-        request.form['ip'],
-        request.form['name'],
-        request.form['userdata'])
-    return "{}".format(id)
+        data['ip'],
+        data['name'],
+        data['userdata'])
+    return jsonify({'register': 'SUCCESS'})
 
 
-#@main_app.route('/ztp/check/{id}')
-#@main_app.route('/ztp/mng/list')
-#@main_app.route('/ztp/mng/{id}/delete')
-#@main_app.route('/ztp/mng/{id}')
+@main_app.route('/ztp/check/<id>', methods=['GET'])
+def check(id):
+    return jsonify(main_app_register.check(id))
+
+
+@main_app.route('/ztp/mng/list', methods=['GET'])
+def list_register():
+    register_list = main_app_register.list_register()
+    return jsonify({'hosts': register_list})
+
+
+@main_app.route('/ztp/mng/<id>/delete', methods=['GET'])
+def delete(id):
+    main_app_register.delete(id)
+    return jsonify({'delete': 'SUCCESS'})
+
+
+@main_app.route('/ztp/mng/<id>', methods=['PUT'])
+def edit(id):
+    try:
+        data = json.loads(request.data.decode())
+    except:
+        abort(400)
+    good_keys = {'ip', 'name', 'userdata'}
+    if not good_keys >= set(data.keys()):
+        abort(400)
+    try:
+        main_app_register.update(id, **data)
+    except KeyError:
+        abort(400)
+    return jsonify(main_app_register.check(id))
