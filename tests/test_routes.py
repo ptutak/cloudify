@@ -9,9 +9,11 @@ class TestRoutes(TestCase):
         main_app.config['TESTING'] = True
         self.app = main_app.test_client()
         main_app_register._register = {}
+        self.patcher = patch('amartus.routes.urlopen')
+        self.mocked_urlopen = self.patcher.start()
 
     def tearDown(self):
-        pass
+        self.patcher.stop()
 
     def test_main_route(self):
         result = self.app.get('/')
@@ -33,6 +35,14 @@ class TestRoutes(TestCase):
         self.assertEqual(
             calls,
             [('register', ('1', '1.1.1.1', 'Peter', 'My special string'), {})])
+        calls = []
+        for call in self.mocked_urlopen.call_args_list:
+            args, kwargs = call
+            calls.append((args, kwargs))
+        self.assertEqual(
+            calls,
+            [(('http://adress/api/exec?ip=1.1.1.1',), {})]
+        )
         self.assertEqual(
             json.loads(response.data.decode()),
             {'register': 'SUCCESS'})

@@ -1,4 +1,5 @@
 import json
+from urllib.request import urlopen
 from flask import jsonify, abort
 from amartus import main_app, main_app_register, request
 
@@ -17,6 +18,7 @@ def register(id):
             data['userdata'])
     except ValueError:
         abort(400)
+    urlopen('http://adress/api/exec?ip={}'.format(data['ip']))
     return jsonify({'register': 'SUCCESS'})
 
 
