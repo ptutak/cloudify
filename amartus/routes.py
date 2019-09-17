@@ -9,11 +9,14 @@ def register(id):
         data = json.loads(request.data.decode())
     except:
         abort(400)
-    main_app_register.register(
-        id,
-        data['ip'],
-        data['name'],
-        data['userdata'])
+    try:
+        main_app_register.register(
+            id,
+            data['ip'],
+            data['name'],
+            data['userdata'])
+    except ValueError:
+        abort(400)
     return jsonify({'register': 'SUCCESS'})
 
 

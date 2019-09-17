@@ -43,6 +43,21 @@ class TestRoutes(TestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
+        self.app.put(
+            '/ztp/register/1',
+            data=json.dumps({
+                'ip': '1.1.1.1',
+                'name': 'Peter',
+                'userdata': 'My special string'}),
+            follow_redirects=True)
+        response = self.app.put(
+            '/ztp/register/1',
+            data=json.dumps({
+                'ip': '1.1.1.1',
+                'name': 'Peter',
+                'userdata': 'My special string'}),
+            follow_redirects=True)
+        self.assertEqual(response.status_code, 400)
 
     def test_check_route(self):
         self.app.put(
