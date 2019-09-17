@@ -8,7 +8,7 @@ from amartus import main_app, main_app_register, request
 def register(id):
     try:
         data = json.loads(request.data.decode())
-    except:
+    except Exception:
         abort(400)
     try:
         main_app_register.register(
@@ -43,7 +43,7 @@ def delete(id):
 def edit(id):
     try:
         data = json.loads(request.data.decode())
-    except:
+    except Exception:
         abort(400)
     good_keys = {'ip', 'name', 'userdata'}
     if not good_keys >= set(data.keys()):
