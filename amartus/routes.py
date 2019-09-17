@@ -1,9 +1,15 @@
-from amartus import main_app, register, request
+from amartus import main_app, main_app_register, request
+
 
 @main_app.route('/ztp/register/<id>', methods=['PUT'])
 def index(id):
-    register[id] = request.data
-    return "{}".format(register[id])
+    main_app_register.register(
+        id,
+        request.form['ip'],
+        request.form['name'],
+        request.form['userdata'])
+    return "{}".format(id)
+
 
 #@main_app.route('/ztp/check/{id}')
 #@main_app.route('/ztp/mng/list')
