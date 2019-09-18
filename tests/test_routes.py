@@ -1,4 +1,5 @@
 import json
+from urllib.error import URLError
 from unittest import TestCase
 from unittest.mock import patch
 from amartus import main_app, main_app_register
@@ -68,6 +69,21 @@ class TestRoutes(TestCase):
                 'userdata': 'My special string'}),
             follow_redirects=True)
         self.assertEqual(response.status_code, 400)
+
+        def raiseError(*args, **kwargs):
+            raise URLError('error')
+
+        self.mocked_urlopen.side_effect = raiseError
+        response = self.app.put(
+            '/ztp/register/5',
+            data=json.dumps({
+                'ip': '1.1.1.1',
+                'name': 'Peter',
+                'userdata': 'My special string'}),
+            follow_redirects=True)
+        self.assertEqual(
+            json.loads(response.data.decode()),
+            {'register': 'FAILED TO EXECUTE'})
 
     def test_check_route(self):
         self.app.put(
