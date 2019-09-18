@@ -68,7 +68,7 @@ class TestRoutes(TestCase):
                 'name': 'Peter',
                 'userdata': 'My special string'}),
             follow_redirects=True)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 409)
 
         def raiseError(*args, **kwargs):
             raise URLError('error')

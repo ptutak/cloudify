@@ -5,6 +5,7 @@ import json
 from uuid import getnode
 from urllib.request import urlopen, Request
 from urllib.parse import urljoin
+from urllib.error import HTTPError
 
 
 def parse_args(args=sys.argv[1:]):
@@ -52,7 +53,11 @@ def main():
         method='PUT',
         headers={'Content-type': 'application/json'}
     )
-    response = urlopen(new_register_request)
+    try:
+        response = urlopen(new_register_request)
+    except HTTPError:
+        print('register conflict')
+        return 1
     print(json.loads(response.read().decode()))
     return 0
 

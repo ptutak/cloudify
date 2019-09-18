@@ -29,12 +29,16 @@ class TestClient(TestCase):
 
     def test_main(self):
         with patch('amartus.client.parse_args') as mocked_parse:
-            local_args = MagicMock()
-            local_args.name = 'Peter'
-            local_args.userdata = 'Data'
-            local_args.server_address = 'http://my.local.address'
-            mocked_parse.return_value = local_args
-            client.main()
+            with patch('builtins.print'):
+                local_args = MagicMock()
+                local_args.name = 'Peter'
+                local_args.userdata = 'Data'
+                local_args.server_address = 'http://my.local.address'
+                mocked_parse.return_value = local_args
+                self.mocked_urlopen.return_value.read\
+                    .return_value.decode.return_value\
+                    = '{"register": "SUCCESS"}'
+                client.main()
 
         args, kwargs = self.mocked_urlopen.call_args
         request = args[0]

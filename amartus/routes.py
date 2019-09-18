@@ -18,7 +18,7 @@ def register(id):
             data['name'],
             data['userdata'])
     except ValueError:
-        abort(400)
+        abort(409)
     try:
         urlopen('http://adress/api/exec?ip={}'.format(data['ip']))
     except URLError:
