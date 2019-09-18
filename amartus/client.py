@@ -52,7 +52,8 @@ def main():
         method='PUT',
         headers={'Content-type': 'application/json'}
     )
-    urlopen(new_register_request)
+    response = urlopen(new_register_request)
+    print(json.loads(response.read().decode()))
     return 0
 
 
